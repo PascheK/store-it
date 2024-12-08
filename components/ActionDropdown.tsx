@@ -3,10 +3,11 @@ import React, {useState} from 'react'
 import Image from "next/image";
 import Link from 'next/link'
 import {constructDownloadUrl} from '@/lib/utils'
+import { renameFile } from "@/lib/actions/file.actions";
+
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogFooter,
@@ -23,6 +24,8 @@ import { Models } from 'node-appwrite';
 import { actionsDropdownItems } from '@/constants';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
+import { usePathname } from 'next/navigation';
+import { FileDetails } from './ActionModalContent';
 
 
 const ActionDropdown = ({file} :{file: Models.Document} ) => {
@@ -31,6 +34,8 @@ const ActionDropdown = ({file} :{file: Models.Document} ) => {
   const [action, setAction] = useState<ActionType | null>(null);
   const [name, setName] = useState(file.name);
   const [isLoading, setIsLoading] = useState(false);
+
+  const path = usePathname();
 
   const closeAllModal = () =>{
     setIsModalOpen(false);
@@ -41,7 +46,20 @@ const ActionDropdown = ({file} :{file: Models.Document} ) => {
   }
 
   const handleAction = async () => {
+    if(!action) return;
+    setIsLoading(true);
 
+    let success = false;
+
+    const actions = {
+      rename: () => renameFile({fileId: file.$id, name, extension: file.extension, path}),
+      share: () => console.log('share'),
+      delete: () => console.log('delete'),
+    };
+
+    success = await actions[action.value as keyof typeof actions]();
+    if(success) closeAllModal(); 
+    setIsLoading(false)
   }
   const renderDialogContent = () => {
     if(!action) return null;
@@ -51,6 +69,7 @@ const ActionDropdown = ({file} :{file: Models.Document} ) => {
     <DialogHeader className='flex flex-col gap-3'>
       <DialogTitle className='text-light-00 text-center'>{label}</DialogTitle>
       { value === 'rename' && <Input type='text' value={name} onChange={(e) => setName(e.target.value)}/> }
+      {value === 'details' && <FileDetails file={file}/>}
     </DialogHeader>
     {['rename','delete','share'].includes(value) && (
       <DialogFooter className='flex flex-col gap-3 md:flex-row'>
