@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 
 import React, { useState } from "react";
 import { createAccount } from "@/lib/actions/user.actions";
+import OtpModal from "./OTPModal";
 
 type FormType = "sign-in" | "sign-up";
 
@@ -139,6 +140,9 @@ const AuthForm = ({ type }: { type: FormType }) => {
           </div>
         </form>
       </Form>
+      {accountId && (
+        <OtpModal email={form.getValues("email")} accountId={accountId} />
+      )}
     </>
   );
 };
