@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/sheet"
 import { Separator } from "@/components/ui/separator"
 
-
+import { signOutUser } from '@/lib/actions/user.actions'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -62,7 +62,8 @@ const MobileNavigation = ({ownerId, accountId, fullName, avatar, email}:Props) =
       <div className='flex flex-col justifiy-between gap-5 pb-5'>
         <FileUploader/>
 
-        <Button type='submit' className='mobile-sign-out-button' onClick={() => {}}>
+        <Button type='submit' className='mobile-sign-out-button' onClick={async () => await signOutUser()}
+        >
             <Image src='/assets/icons/logout.svg' alt='Logout' width={24} height={24}/>
             <p>Logout</p>
         </Button>
