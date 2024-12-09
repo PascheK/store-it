@@ -113,8 +113,41 @@ const handleError = (error: unknown, message:string) => {
       return parseStringify(updateFile);
     }catch(error){
       handleError(error, "Failed to rename files");
-
     }
+  }
 
+  export const updateFile = async ({fileId, emails, path}: UpdateFilesProps) =>{
+    const {databases} = await createAdminClient();
+    try{
+      const updateFile = await databases.updateDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.filesCollectionId,
+        fileId,
+        {
+          users: emails,
+        }
+      );    
+      revalidatePath(path);
+      return parseStringify(updateFile);
+    }catch(error){
+      handleError(error, "Failed to rename files");
+    }
+  }
 
+  export const deleteFile = async ({fileId, bucketFileId, path}: DeleteFileProps) =>{
+    const {databases, storage} = await createAdminClient();
+    try{
+      const deleteFile = await databases.deleteDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.filesCollectionId,
+        fileId,
+      );    
+      if(deleteFile){
+        await storage.deleteFile(appwriteConfig.bucketId, bucketFileId)
+      }
+      revalidatePath(path);
+      return parseStringify({status: 'success'});
+    }catch(error){
+      handleError(error, "Failed to delete files");
+    }
   }
