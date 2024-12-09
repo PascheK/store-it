@@ -1,8 +1,85 @@
-import React from 'react'
+'use client'
+import React, {useState, useEffect} from 'react'
+import Image from 'next/image';
+import {Input} from '@/components/ui/input'
+import {Thumbnail} from '@/components/Thumbnail'
+import FormatedDateTime from './FormatedDateTime'
+
+import {useSearchParams, useRouter, usePathname} from 'next/navigation'
+import {getFiles} from '@/lib/actions/file.actions'
+import {Models} from 'node-appwrite'
+import {useDebounce} from 'use-debounce'
 
 const Search = () => {
+  const [query, setQuery] = useState('')
+  const [results, setResults] = useState<Models.Document[]>([])
+  const [open,setOpen] = useState(false)
+
+  const searchParams = useSearchParams()
+  const router = useRouter();
+  const path = usePathname()
+  const [debouncedQuery] =useDebounce(query, 300)
+
+  const searchQuery = searchParams.get('query') || ''
+
+  useEffect(() => {
+    const fetchFiles = async () => {
+
+      if(debouncedQuery.length === 0) {
+        setResults([])
+        setOpen(false)
+        return router.push(path.replace(searchParams.toString(), ""))
+      }
+
+      const files = await getFiles({types:[], searchText: debouncedQuery});
+      setResults(files.documents);
+      setOpen(true)
+    };
+    fetchFiles();
+  }, [debouncedQuery])
+
+  useEffect(() => {
+    if(!searchQuery) {
+      setQuery("");
+    }
+  }, [searchQuery])
+
+  const handleClickItem = (file: Models.Document) => {
+    setOpen(false);
+    setResults([]);
+
+    router.push(`/${file.type === 'video' || file.type === 'audio' ? 'media' : file.type +'s'}?query=${query} `)
+
+
+  }
+
+
   return (
-    <div>Search</div>
+    <div className='search'>
+      <div className='search-input-wrapper'>
+        <Image src='/assets/icons/search.svg' alt='search' width={24} height={24} />
+        <Input value={query} placeholder='Search...' className='search-input' onChange={(e) => setQuery(e.target.value)}/>
+        {open && (
+          <ul className='search-result'>
+            {results.length > 0 ? (
+                  results.map((file) => (
+                    <li key={file.$id} className='flex items-center  justify-between' onClick={() => handleClickItem(file)}> 
+                      <div className='flex cursor-pointer items-center gap-4'>
+                        <Thumbnail type={file.type} extension={file.extension} url={file.url} className='size-9 min-w-9'/>
+                        <p className='line-clamp-1 text-light-100'>
+                        {file.name}
+                        </p>
+                      </div>
+                      <FormatedDateTime date={file.$createdAt} className='caption line-clamp-1 text-light-200'/>
+                    </li>
+                  ))
+            ): (<p className='empty-result'>No files</p>)
+            }
+          </ul>
+        )}
+      </div>
+    </div> 
+
   )
 }
 
