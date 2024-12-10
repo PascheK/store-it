@@ -84,6 +84,7 @@ export const getCurrentUser = async () => {
 
   try{
     const { databases, account } = await createSessionClient();
+    console.log('session work great ')
 
     const result = await account.get();
 
@@ -97,7 +98,7 @@ export const getCurrentUser = async () => {
   
     return parseStringify(user.documents[0]);
   } catch (error) {
-    console.log(error);
+    console.log('session dont work' + error);
     return null;
   }
  
