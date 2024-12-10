@@ -14,8 +14,8 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { Button } from './ui/button';
-import FileUploader from './FileUploader';
+import { Button } from '@/components/ui/button';
+import FileUploader from '@/components/FileUploader';
 
 interface Props {
   $id: string;

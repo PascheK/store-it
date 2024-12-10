@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react'
 import Image from 'next/image';
 import {Input} from '@/components/ui/input'
 import {Thumbnail} from '@/components/Thumbnail'
-import FormatedDateTime from './FormatedDateTime'
+import FormatedDateTime from '@/components/FormatedDateTime'
 
 import {useSearchParams, useRouter, usePathname} from 'next/navigation'
 import {getFiles} from '@/lib/actions/file.actions'

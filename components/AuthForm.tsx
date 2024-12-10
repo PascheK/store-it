@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 
 import React, { useState } from "react";
 import { createAccount, signInUser } from "@/lib/actions/user.actions";
-import OtpModal from "./OTPModal";
+import OtpModal from "@/components/OTPModal";
 
 type FormType = "sign-in" | "sign-up";
 

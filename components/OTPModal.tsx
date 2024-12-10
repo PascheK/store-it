@@ -17,7 +17,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 
 const OtpModal = ({
   accountId,

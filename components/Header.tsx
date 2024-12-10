@@ -1,8 +1,8 @@
 import React from 'react'
-import { Button } from './ui/button'
+import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import Search from './Search'
-import FileUploader from './FileUploader'
+import Search from '@/components/Search'
+import FileUploader from '@/components/FileUploader'
 import { signOutUser } from '@/lib/actions/user.actions'
 
 const Header = ({userId, accountId}: {userId:string, accountId:string}) => {

@@ -22,10 +22,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Models } from 'node-appwrite';
 import { actionsDropdownItems } from '@/constants';
-import { Input } from './ui/input';
-import { Button } from './ui/button';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
-import { FileDetails, ShareInput } from './ActionModalContent';
+import { FileDetails, ShareInput } from '@/components/ActionModalContent';
 
 
 const ActionDropdown = ({file} :{file: Models.Document} ) => {
@@ -75,12 +75,12 @@ const ActionDropdown = ({file} :{file: Models.Document} ) => {
     return(
       <DialogContent className='shad-dialog button'>
     <DialogHeader className='flex flex-col gap-3'>
-      <DialogTitle className='text-light-00 text-center'>{label}</DialogTitle>
+      <DialogTitle className='text-center text-light-100'>{label}</DialogTitle>
       { value === 'rename' && <Input type='text' value={name} onChange={(e) => setName(e.target.value)}/> }
       {value === 'details' && <FileDetails file={file}/>}
       {value === 'share' && <ShareInput file={file} onInputChange={setEmails} onRemove={handleRemoveUser}/>}
       {value === 'delete' && 
-      <p className='delete-confimation'>Are you sure you want to delete {` `} 
+      <p className='delete-confirmation'>Are you sure you want to delete {` `} 
         <span className='delete-file-name'>{file.name}</span> ?
       </p>
       }
@@ -117,12 +117,12 @@ const ActionDropdown = ({file} :{file: Models.Document} ) => {
       }}
       >
         {actionItem.value === 'download' ? 
-        <Link href={constructDownloadUrl(file.bucketFileId)} download={file.name} className='flex item-center gap-2'>
+        <Link href={constructDownloadUrl(file.bucketFileId)} download={file.name} className='flex items-center gap-2'>
         <Image src={actionItem.icon} alt={actionItem.label} width={30} height={30}/>
         {actionItem.label}
         </Link>
         : 
-        <div className='flex item-center gap-2'>
+        <div className='flex items-center gap-2'>
   <Image src={actionItem.icon} alt={actionItem.label} width={30} height={30}/>
   {actionItem.label}
         </div>

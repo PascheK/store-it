@@ -32,7 +32,7 @@ const pageType = capitalizeFirstLetter(type);
         <p className='body-1'>Total: 
           <span className='h5'>{convertFileSize(usageSummary.filter(f => f.title === pageType)[0].size)}</span></p>
           <div className='sort-container'>
-        <p className='body-1 hidden sm:block text-light-200'> Sort by:</p>
+        <p className='body-1 hidden text-light-200 sm:block'> Sort by:</p>
         <Sort/>
       </div>
       </div>
