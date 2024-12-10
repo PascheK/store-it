@@ -39,7 +39,6 @@ export const sendEmailOTP = async ({email} : {email: string}) => {
 }
 
 export const createAccount = async ({fullName,email} : {fullName: string, email: string}) => {
-
   const existingUser = await getUserByEmail(email);
 
   const accountId = await sendEmailOTP({email});
@@ -67,6 +66,7 @@ export const verifySecret = async ({accountId, password} : {accountId: string, p
   try{
     const {account} = await createAdminClient();
     const session =  await account.createSession(accountId, password);
+    console.log(session);
         (await cookies()).set('appwrite-session', session.secret, {
           path:'/',
           httpOnly: true,
@@ -76,7 +76,7 @@ export const verifySecret = async ({accountId, password} : {accountId: string, p
         return parseStringify({sessionId: session.$id});
   }
   catch(e){
-    handleError(e, "Failed to verify OTP");
+    handleError(e, "Failed to create cookies");
   }
 }
 
@@ -84,7 +84,6 @@ export const getCurrentUser = async () => {
 
   try{
     const { databases, account } = await createSessionClient();
-    console.log('session work great ')
 
     const result = await account.get();
 
@@ -98,7 +97,7 @@ export const getCurrentUser = async () => {
   
     return parseStringify(user.documents[0]);
   } catch (error) {
-    console.log('session dont work' + error);
+    console.log(error);
     return null;
   }
  
@@ -118,7 +117,6 @@ export const signOutUser = async () => {
 };
 
 export const signInUser = async ({email} : {email: string}) => {
-
   try{
     const existingUser = await getUserByEmail(email);
     if(existingUser){
