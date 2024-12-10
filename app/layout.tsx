@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import {Poppins} from 'next/font/google';
+import { Poppins } from 'next/font/google'
+
 import "./globals.css";
 
 const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
-  variable: '--font-poppins',
-});
+    subsets: ['latin'],
+    weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+    variable: '--font-poppins',
+})
 
 export const metadata: Metadata = {
-  title: "Store it",
-  description: "The only storage solution you'll ever need",
+  title: "StoreIt",
+  description: "StoreIt - The only storage solution you need.",
 };
 
 export default function RootLayout({
